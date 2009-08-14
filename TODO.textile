@@ -1,0 +1,8 @@
+h1. Todo List
+
+h2. Tasks:
+
+* testing
+* boot strap the dot file
+* execute the dot file
+* DSL for dot file contents

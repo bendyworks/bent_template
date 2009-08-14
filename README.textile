@@ -1,0 +1,13 @@
+h1. Bent Templates
+
+Rails templates bent to your will.
+
+We are writing this project specifically for the Rails Rumble. Afterward, we intend to use it on all future client projects. You should too!
+
+h2. Goals
+
+* opinionated templating
+** if you want different behavior, fork us
+** if you add opinionated behavior, send us a pull request
+* allow a collection of sub-templates
+* master template one-line declarations trigger sub-templates
