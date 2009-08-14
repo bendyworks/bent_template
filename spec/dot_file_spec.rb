@@ -6,6 +6,11 @@ def find_template
   raise "bent_template.rb not found"
 end
 
+def last_pushed_dot_file_contents
+  require 'grit'
+  repo = Grit::Repo.new File.expand_path('.')
+end
+
 describe "install" do
   describe "on a fresh system" do
     before do
@@ -22,8 +27,7 @@ describe "install" do
       system "rails #{@dummy_app} -m #{bent_template_path} &> /dev/null"
 
       File.exists?(@dot_file_path).should be_true
-      # dot_file should exist
-      # dot_file should match github master file contents
+      File.read(@dot_file_path).should == "git\n"
     end
   end
 end
