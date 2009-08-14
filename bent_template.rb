@@ -9,8 +9,8 @@ unless File.exists? local_bent
 end
 
 ['git', 'rspec'].each do |feature|
-  feature_location = "http://github.com/bendyworks/bent_templates/raw/master/#{feature}/init.rb"
-  load_tempate open(feature_location).read
+  feature_location = "http://github.com/bendyworks/bent_templates/raw/master/#{feature}/#{feature}_init.rb"
+  load_template feature_location
 end
 
 load_template local_bent
