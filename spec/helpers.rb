@@ -12,6 +12,6 @@ def last_pushed_dot_file_contents
   require 'grit'
   repo = Grit::Repo.new File.expand_path('.')
   blobs = repo.commits('origin/master').first.tree.contents
-  dbt = blobs.select {|b| b.name == 'dot_bent_template.rb'}.first
+  dbt = blobs.select {|b| b.name == 'dot_bent.rb'}.first
   dbt.data
 end
