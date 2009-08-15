@@ -2,6 +2,7 @@ def git_bent
   in_root do
     git 'init'
   end
+  file '.gitignore', 'log'
   # write .gitignore file
   # git add .
   # git ci -m ''
