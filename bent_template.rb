@@ -1,12 +1,12 @@
 
-project_name = File.basename(root)
+PROJECT_NAME = File.basename(root)
 load_template 'http://bendyworks.com/latest.rb'
 
 GITHUB_USER = "bendyworks"
 
 def bent_file path
   url = "http://github.com/#{GITHUB_USER}/bent_templates/raw/master/files/#{path}"
-  file path, open(url).read.gsub('#{project_name}', project_name)
+  file path, open(url).read.gsub('#{project_name}', PROJECT_NAME)
 rescue OpenURI::HTTPError => e
   log "error", "retrieving #{url}, #{e.message}"
 end
@@ -19,16 +19,16 @@ git :init
 
 # PLUGINS
 git :submodule => 'init'
-# plugin 'rspec', :git => 'git://github.com/dchelimsky/rspec.git', :submodule => true
-# plugin 'rspec-rails', :git => 'git://github.com/dchelimsky/rspec-rails.git', :submodule => true
-# plugin 'haml', :git => 'git://github.com/nex3/haml.git', :submodule => true
-# plugin 'cucumber', :git => 'git://github.com/aslakhellesoy/cucumber.git', :submodule => true
-# plugin 'webrat', :git => 'git://github.com/brynary/webrat.git', :submodule => true
-# plugin 'paperclip', :git => 'git://github.com/thoughtbot/paperclip.git', :submodule => true
-# plugin 'hoptoad', :git => 'git://github.com/thoughtbot/hoptoad_notifier.git', :submodule => true
-# plugin 'db-populate', :git => 'git://github.com/ffmike/db-populate.git', :submodule => true
-# plugin 'annotate_models', :git => 'git://github.com/bendycode/annotate_models', :submodule => true
-# plugin 'html_matchers', :git => 'git://github.com/bendycode/html_matchers', :submodule => true
+plugin 'rspec', :git => 'git://github.com/dchelimsky/rspec.git', :submodule => true
+plugin 'rspec-rails', :git => 'git://github.com/dchelimsky/rspec-rails.git', :submodule => true
+plugin 'haml', :git => 'git://github.com/nex3/haml.git', :submodule => true
+plugin 'cucumber', :git => 'git://github.com/aslakhellesoy/cucumber.git', :submodule => true
+plugin 'webrat', :git => 'git://github.com/brynary/webrat.git', :submodule => true
+plugin 'paperclip', :git => 'git://github.com/thoughtbot/paperclip.git', :submodule => true
+plugin 'hoptoad', :git => 'git://github.com/thoughtbot/hoptoad_notifier.git', :submodule => true
+plugin 'db-populate', :git => 'git://github.com/ffmike/db-populate.git', :submodule => true
+plugin 'annotate_models', :git => 'git://github.com/bendycode/annotate_models', :submodule => true
+plugin 'html_matchers', :git => 'git://github.com/bendycode/html_matchers', :submodule => true
 
 git :submodule => 'update'
 
@@ -133,6 +133,8 @@ run 'rm README public/index.html public/favicon.ico'
 
 bent_file '.gitignore'
 
+rake 'db:migrate'
+
 git :add => '.'
 git :config => 'branch.master.remote origin'
 git :config => 'branch.master.merge refs/heads/master'
@@ -141,6 +143,6 @@ git :config => 'push.default matching'
 run %{find . -type d -empty | grep -v 'vendor' | grep -v '.git' | grep -v 'tmp' | xargs -I xxx touch xxx/.gitignore}
 git :add => '.'
 git :commit => '-am "Initial commit as built by bent_templates"'
-git :remote => "add origin git@bendyworks.com:${project_name}.git"
+git :remote => "add origin git@bendyworks.com:#{PROJECT_NAME}.git"
 log 'TODO', "Update gitosis admin"
 log 'TODO', "Execute `git push origin master:refs/heads/master`"
