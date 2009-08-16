@@ -28,3 +28,19 @@ def last_pushed_dot_file_contents
   dbt = blobs.select {|b| b.name == 'dot_bent.rb'}.first
   dbt.data
 end
+
+def dir_exists name
+  Dir[File.expand_path("./#{@dummy_app}/#{name}")].should_not be_empty
+end
+
+def file_exists name, contents = nil
+  path = "./#{@dummy_app}/#{name}"
+  File.exists?(path).should be_true
+  File.read(path).should == contents if contents
+end
+
+def verify_submodule path
+  submodule = Grit::Repo.new("./#{@dummy_app}/#{path}")
+  app = Grit::Repo.new("./#{@dummy_app}")
+  submodule.commits.should_not == app.commits
+end

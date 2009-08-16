@@ -9,15 +9,17 @@ unless File.exists? local_bent
 end
 
 @feature_location = {}
-['git', 'rspec'].each do |feature|
-  if defined?(::FEATURES_FOR_TESTING)
-    @feature_location[feature] = FEATURES_FOR_TESTING[feature]
-  else
-    @feature_location[feature] =
-      "http://github.com/bendyworks/bent_templates/raw/master/#{feature}/#{feature}_init.rb"
+if defined?(::FEATURES_FOR_TESTING)
+  FEATURES_FOR_TESTING.each do |feature, path|
+    @feature_location[feature] = path
+    load_template @feature_location[feature]
   end
-
-  load_template @feature_location[feature]
+else
+  ['git', 'rspec'].each do |feature|
+    @feature_location[feature] =
+      "http://github.com/bendyworks/bent_templates/raw/master/actions/#{feature}_init.rb"
+    load_template @feature_location[feature]
+  end
 end
 
 load_template local_bent
