@@ -143,6 +143,6 @@ git :config => 'push.default matching'
 run %{find . -type d -empty | grep -v 'vendor' | grep -v '.git' | grep -v 'tmp' | xargs -I xxx touch xxx/.gitignore}
 git :add => '.'
 git :commit => '-am "Initial commit as built by bent_templates"'
-git :remote => "add origin git@bendyworks.com:#{PROJECT_NAME}.git"
-log 'TODO', "Update gitosis admin"
-log 'TODO', "Execute `git push origin master:refs/heads/master`"
+git :remote => "add origin git@github.com:#{GITHUB_USER}/#{PROJECT_NAME}.git"
+log 'TODO', "Tell github about your repo"
+log 'TODO', "Execute `git push`"
