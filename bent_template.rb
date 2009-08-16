@@ -11,6 +11,18 @@ rescue OpenURI::HTTPError => e
   log "error", "retrieving #{url}, #{e.message}"
 end
 
+def comment_out path, line
+  gsub_file path, /\s*(#{Regexp.escape(line)})/, '# \1'
+end
+
+def uncomment path, line
+  gsub_file path, /#\s*(#{Regexp.escape(line)})/, '\1'
+end
+
+def insert_after path, target, to_insert
+  gsub_file path, /(#{Regexp.escape(target)}.*$)/, "\\1\n\n#{to_insert}\n"
+end
+
 def mkdir folder
   FileUtils.mkdir_p(folder)
 end
@@ -92,22 +104,24 @@ append_file 'config/initializers/session_store.rb', 'ActionController::Base.sess
 rake 'db:sessions:create'
 
 # TODO: create FourOhFourController and write a splat route for it
-# TODO: remove default routes at bottom of routes.rb
-
-gsub_file 'app/controllers/application_controller.rb', /#\s*(filter_parameter_logging :password)/, '\1'
+comment_out 'config/routes.rb', "map.connect ':controller/:action/:id'"
+uncomment 'app/controllers/application_controller.rb', 'filter_parameter_logging :password'
 
 # CUCUMBER
-
 bent_file 'lib/tasks/change_default.rake'
 bent_file 'lib/tasks/cucumber.rake'
-# TODO: comment out two lines in 'lib/tasks/rspec.rake' that say "default"
+comment_out 'lib/tasks/rspec.rake', "Rake.application.instance_variable_get('@tasks').delete('default')"
+comment_out 'lib/tasks/rspec.rake', "task :default => :spec"
 bent_file 'Rakefile'
 
 bent_file 'spec/fixjour_builders.rb'
 bent_file 'spec/lib/fixjour_builders_spec.rb'
 bent_file 'spec/sequence.rb'
 
-# TODO: Add remarkable_rails and fixjour_builders (twice) to spec_helper.rb
+insert_after 'spec/spec_helper.rb', "require 'spec/rails'",
+  "require 'remarkable_rails'\nrequire File.expand_path(File.dirname(__FILE__) + \"/fixjour_builders\")"
+insert_after 'spec/spec_helper.rb', "# config.fixture_path = RAILS_ROOT + '/spec/fixtures/'",
+  "  config.include(Fixjour)"
 
 bent_file 'cucumber.yml'
 
