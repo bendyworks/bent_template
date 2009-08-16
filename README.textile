@@ -10,4 +10,3 @@ h2. Goals
 ** if you want different behavior, fork us
 ** if you add opinionated behavior, send us a pull request
 * allow a collection of sub-templates
-* master template one-line declarations trigger sub-templates
