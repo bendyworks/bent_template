@@ -12,7 +12,7 @@ rescue OpenURI::HTTPError => e
 end
 
 def comment_out path, line
-  gsub_file path, /\s*(#{Regexp.escape(line)})/, '# \1'
+  gsub_file path, /^(\s*)(#{Regexp.escape(line)})/, '\1# \2'
 end
 
 def uncomment path, line
@@ -20,7 +20,11 @@ def uncomment path, line
 end
 
 def insert_after path, target, to_insert
-  gsub_file path, /(#{Regexp.escape(target)}.*$)/, "\\1\n\n#{to_insert}\n"
+  gsub_file path, /(^.*#{Regexp.escape(target)}.*$)/, "\\1\n\n#{to_insert}\n"
+end
+
+def insert_before path, target, to_insert
+  gsub_file path, /(^.*#{Regexp.escape(target)}.*$)/, "#{to_insert}\n\n\\1\n"
 end
 
 def mkdir folder
@@ -104,7 +108,7 @@ append_file 'config/initializers/session_store.rb', 'ActionController::Base.sess
 rake 'db:sessions:create'
 
 # TODO: create FourOhFourController and write a splat route for it
-comment_out 'config/routes.rb', "map.connect ':controller/:action/:id'"
+comment_out 'config/routes.rb', "map.connect ':controller/:action/:id"
 uncomment 'app/controllers/application_controller.rb', 'filter_parameter_logging :password'
 
 # CUCUMBER
@@ -134,10 +138,19 @@ bent_file 'features/step_definitions/steps.rb'
 bent_file 'features/step_definitions/watir_steps.rb'
 
 # TODO: update webrat_steps.rb to include if ENV['RUN_WATIR'] (etc)
+webrat_steps = 'features/step_definitions/webrat_steps.rb'
+gsub_file webrat_steps, /^(.+)$/, '  \1'
+insert_before webrat_steps,
+  'require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "paths"))',
+  "unless ENV['run_watir']"
+append_file webrat_steps, "\nend"
+
 bent_file 'features/support/bendycode.css'
 bent_file 'features/support/bendycode.rb'
 bent_file 'features/support/env.rb'
-# TODO: add a generic path to paths.rb
+
+insert_before 'features/support/paths.rb', '# Add more mappings here.', '    when /the (.*) page/
+      "/#{$1.gsub(/\s/, \'_\').underscore}"'
 
 # LIB
 bent_file 'lib/label_form_builder.rb'
