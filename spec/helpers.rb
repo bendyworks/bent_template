@@ -4,7 +4,12 @@ def run_rails remote = false
   else
     env = 'DOT_BENT="dot_bent.rb"'
   end
-  system "#{env} rails #{@dummy_app} -m #{find_template}"
+  # system "#{env} rails #{@dummy_app} -m #{find_template}"
+  require 'rails/version'
+  require 'rails_generator'
+  require 'rails_generator/scripts/generate'
+  Rails::Generator::Base.use_application_sources!
+  Rails::Generator::Scripts::Generate.new.run([@dummy_app, '-m', find_template], :generator => 'app')
 end
 
 def find_template

@@ -1,4 +1,5 @@
 require 'rubygems'
+
 require 'grit'
 require File.expand_path(File.join(__FILE__, '..', 'helpers'))
 
@@ -28,14 +29,21 @@ describe "bent_templates" do
       end
     end
     it "sets up git repository" do
+      @feature_location = {}
+      ['git', 'rspec'].each do |feature|
+        @feature_location[feature] =
+          File.expand_path(File.join(__FILE__, '..', '..', feature, "#{feature}_init.rb"))
+      end
+      FEATURES_FOR_TESTING = @feature_location
       run_rails
 
       Dir[File.expand_path("./#{@dummy_app}/.git")].should_not be_empty
 
-      # write .gitignore file
       File.exists?("./#{@dummy_app}/.gitignore").should be_true
-      # make sure some random .gitignored file is not under git control
-      # git add .
+      File.read("./#{@dummy_app}/.gitignore").should include("log")
+      repo = Grit::Repo.new("./#{@dummy_app}")
+      repo.tree.contents.should_not be_empty
+      repo.commits.should_not be_empty
       # git ci -m ''
       # git remote add origin blah
       # git submodule add <each plugin defined as git_submodule>
