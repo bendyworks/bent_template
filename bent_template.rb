@@ -107,8 +107,15 @@ bent_file 'config/deploy/production.rb'
 append_file 'config/initializers/session_store.rb', 'ActionController::Base.session_store = :active_record_store'
 rake 'db:sessions:create'
 
-# TODO: create FourOhFourController and write a splat route for it
 comment_out 'config/routes.rb', "map.connect ':controller/:action/:id"
+
+# TODO: create FourOhFourController and write a splat route for it
+# gsub_file 'config/routes.rb', /^end$/,
+#   "  unless ::ActionController::Base.consider_all_requests_local
+#     map.connect '*path', :controller => 'application', :action => 'rescue_404'
+#   end
+# end"
+
 uncomment 'app/controllers/application_controller.rb', 'filter_parameter_logging :password'
 
 # CUCUMBER
@@ -137,7 +144,6 @@ bent_file 'features/step_definitions/helpers.rb'
 bent_file 'features/step_definitions/steps.rb'
 bent_file 'features/step_definitions/watir_steps.rb'
 
-# TODO: update webrat_steps.rb to include if ENV['RUN_WATIR'] (etc)
 webrat_steps = 'features/step_definitions/webrat_steps.rb'
 gsub_file webrat_steps, /^(.+)$/, '  \1'
 insert_before webrat_steps,
