@@ -22,6 +22,7 @@ h2. How To Contribute
 
 # Do all of *How To Customize*.
 # Send us a pull request.
+# Win.
 
 h2. Goals
 
