@@ -1,4 +1,3 @@
-
 PROJECT_NAME = File.basename(root)
 load_template 'http://bendyworks.com/latest.rb'
 
@@ -176,6 +175,7 @@ git :config => 'push.default matching'
 run %{find . -type d -empty | grep -v 'vendor' | grep -v '.git' | grep -v 'tmp' | xargs -I xxx touch xxx/.gitignore}
 git :add => '.'
 git :commit => '-am "Initial commit as built by bent_templates"'
-git :remote => "add origin git@github.com:#{GITHUB_USER}/#{PROJECT_NAME}.git"
+# git :remote => "add origin git@github.com:#{GITHUB_USER}/#{PROJECT_NAME}.git"
+log 'TODO', "git add origin git@github.com:YOUR_GITHUB_USERNAME/#{PROJECT_NAME}.git"
 log 'TODO', "Tell github about your repo"
 log 'TODO', "Execute `git push`"
