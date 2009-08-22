@@ -4,7 +4,7 @@ load_template 'http://bendyworks.com/latest.rb'
 GITHUB_USER = "bendyworks"
 
 def bent_file path
-  url = "http://github.com/#{GITHUB_USER}/bent_templates/raw/master/files/#{path}"
+  url = "http://github.com/#{GITHUB_USER}/bent_template/raw/master/files/#{path}"
   file path, open(url).read.gsub('#{project_name}', PROJECT_NAME)
 rescue OpenURI::HTTPError => e
   log "error", "retrieving #{url}, #{e.message}"
