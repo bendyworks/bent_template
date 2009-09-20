@@ -6,10 +6,6 @@ This is our template for quickly starting a project with all our favorite tools 
 
 h2. How To Use
 
-<pre>rails app_name -m http://bendyworks.com/bent_template.rb</pre>
-
-or
-
 <pre>rails app_name -m http://github.com/bendyworks/bent_template/raw/master/bent_template.rb</pre>
 
 h2. How To Customize
