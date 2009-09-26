@@ -1,11 +1,10 @@
-
 PROJECT_NAME = File.basename(root)
 load_template 'http://bendyworks.com/latest.rb'
 
 GITHUB_USER = "bendyworks"
 
 def bent_file path
-  url = "http://github.com/#{GITHUB_USER}/bent_templates/raw/master/files/#{path}"
+  url = "http://github.com/#{GITHUB_USER}/bent_template/raw/master/files/#{path}"
   file path, open(url).read.gsub('#{project_name}', PROJECT_NAME)
 rescue OpenURI::HTTPError => e
   log "error", "retrieving #{url}, #{e.message}"
@@ -176,6 +175,7 @@ git :config => 'push.default matching'
 run %{find . -type d -empty | grep -v 'vendor' | grep -v '.git' | grep -v 'tmp' | xargs -I xxx touch xxx/.gitignore}
 git :add => '.'
 git :commit => '-am "Initial commit as built by bent_templates"'
-git :remote => "add origin git@github.com:#{GITHUB_USER}/#{PROJECT_NAME}.git"
+# git :remote => "add origin git@github.com:#{GITHUB_USER}/#{PROJECT_NAME}.git"
+log 'TODO', "git add origin git@github.com:YOUR_GITHUB_USERNAME/#{PROJECT_NAME}.git"
 log 'TODO', "Tell github about your repo"
 log 'TODO', "Execute `git push`"
