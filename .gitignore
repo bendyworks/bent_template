@@ -1,2 +1,3 @@
 *.tmproj
 dummy_app
+.DS_Store

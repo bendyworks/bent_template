@@ -1,0 +1,3 @@
+= form.text_field :login
+= form.password_field :password, :label => (form.object.new_record? ? nil : "Change Password")
+= form.password_field :password_confirmation

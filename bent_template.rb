@@ -3,9 +3,13 @@ load_template 'http://bendyworks.com/latest.rb'
 
 GITHUB_USER = "bendyworks"
 
-def bent_file path
+def download_bent_file path
   url = "http://github.com/#{GITHUB_USER}/bent_template/raw/master/files/#{path}"
-  file path, open(url).read.gsub('#{project_name}', PROJECT_NAME)
+  open(url).read.gsub('#{project_name}', PROJECT_NAME)
+end
+
+def bent_file path
+  file path, download_bent_file(path)
 rescue OpenURI::HTTPError => e
   log "error", "retrieving #{url}, #{e.message}"
 end
@@ -80,8 +84,30 @@ latest :jquery, :min
 run 'curl -L http://jqueryjs.googlecode.com/svn/trunk/plugins/form/jquery.form.js > public/javascripts/jquery.form.js'
 
 # TODO: AUTHLOGIC STUFF HERE
-# generate authlogic
-# create seed data for an admin user
+generate 'session user_session'
+bent_file 'app/models/user.rb'
+bent_file 'app/controllers/user_sessions_controller.rb'
+bent_file 'app/controllers/users_controller.rb'
+bent_file 'app/views/user_sessions/new.html.haml'
+bent_file 'app/views/users/_form.html.haml'
+bent_file 'app/views/users/edit.html.haml'
+bent_file 'app/views/users/new.html.haml'
+bent_file 'app/views/users/show.html.haml'
+
+bent_file 'db/migrate/20090926235709_add_user.rb'
+
+bent_file 'spec/controllers/users_controller_spec.rb'
+bent_file 'spec/models/user_spec.rb'
+
+authlogic_stuff = download_bent_file('app/controllers/application_controller.part.rb')
+insert_after 'app/controllers/application_controller.rb', 'filter_parameter_logging', authlogic_stuff
+
+route 'map.resource :user_session'
+route 'map.resource :account, :controller => "users"'
+route 'map.resources :users'
+
+file 'db/seeds.rb', 'User.create(:login => "admin", :password => "admin", :password_confirmation => "admin")'
+
 # ensure "rake db:test:prepare" uses seed data
 
 bent_file 'config/database.yml.template'
@@ -91,7 +117,6 @@ run 'cp config/database.yml.template config/database.yml'
 rake 'db:create'
 rake 'db:create', :env => 'test'
 rake 'db:migrate'
-rake 'db:test:prepare'
 
 capify!
 
@@ -162,6 +187,8 @@ run 'rm README public/index.html public/favicon.ico'
 bent_file '.gitignore'
 
 rake 'db:migrate'
+rake 'db:test:prepare'
+rake 'db:seed'
 
 git :add => '.'
 git :config => 'branch.master.remote origin'

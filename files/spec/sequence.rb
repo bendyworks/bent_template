@@ -11,6 +11,10 @@ class Sequence
     @proc.call(@value)
   end
 
+  def reset
+    @value = 0
+  end
+
   def current
     @proc.call(@value)
   end
