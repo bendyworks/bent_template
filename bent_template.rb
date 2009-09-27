@@ -81,7 +81,7 @@ generate 'cucumber'
 
 # JQUERY
 latest :jquery, :min
-run 'curl -L http://jqueryjs.googlecode.com/svn/trunk/plugins/form/jquery.form.js > public/javascripts/jquery.form.js'
+run 'curl -L http://github.com/malsup/form/blob/master/jquery.form.js > public/javascripts/jquery.form.js'
 
 # TODO: AUTHLOGIC STUFF HERE
 generate 'session user_session'
