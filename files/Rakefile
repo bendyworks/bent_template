@@ -14,12 +14,3 @@ class Rake::Task
 end
 
 require 'tasks/rails'
-
-# Ensures that seed data is loaded into database immediately after 'rake db:test:prepare' flushes it
-namespace :db do
-  namespace :test do
-    task :prepare do
-      Rake::Task['db:populate'].invoke
-    end
-  end
-end
